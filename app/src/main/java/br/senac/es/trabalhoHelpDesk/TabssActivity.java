@@ -1,4 +1,4 @@
-package br.senac.es.trabalhoreferencia;
+package br.senac.es.trabalhoHelpDesk;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;

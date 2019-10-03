@@ -1,4 +1,4 @@
-package br.senac.es.trabalhoreferencia.model;
+package br.senac.es.trabalhoHelpDesk.model;
 
 public enum Status {
 

@@ -1,4 +1,4 @@
-package br.senac.es.trabalhoreferencia;
+package br.senac.es.trabalhoHelpDesk;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,8 +12,8 @@ import androidx.fragment.app.Fragment;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.senac.es.trabalhoreferencia.model.Mensagem;
-import br.senac.es.trabalhoreferencia.model.Status;
+import br.senac.es.trabalhoHelpDesk.model.Mensagem;
+import br.senac.es.trabalhoHelpDesk.model.Status;
 
 public class Tab2Fragment extends Fragment {
 

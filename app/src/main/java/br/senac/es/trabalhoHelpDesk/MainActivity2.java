@@ -1,4 +1,4 @@
-package br.senac.es.trabalhoreferencia;
+package br.senac.es.trabalhoHelpDesk;
 
 import android.os.Bundle;
 
@@ -13,8 +13,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.senac.es.trabalhoreferencia.model.Mensagem;
-import br.senac.es.trabalhoreferencia.model.Status;
+import br.senac.es.trabalhoHelpDesk.model.Mensagem;
+import br.senac.es.trabalhoHelpDesk.model.Status;
 
 public class MainActivity2 extends AppCompatActivity {
 
