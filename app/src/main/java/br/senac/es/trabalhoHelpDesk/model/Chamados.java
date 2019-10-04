@@ -58,10 +58,13 @@ public class Chamados {
     }
 
 
-
     @Override
     public String toString() {
-        return
-                 status  ;
+        return "Chamados{" +
+                " dataAbertura=" + dataAbertura +
+                ", decricao='" + decricao + '\'' +
+                ", status='" + status + '\'' +
+                ", solucao='" + solucao + '\'' +
+                '}';
     }
 }
