@@ -1,7 +1,6 @@
 package br.senac.es.trabalhoHelpDesk;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,30 +13,52 @@ import androidx.fragment.app.Fragment;
 
 import com.google.gson.Gson;
 
-import br.senac.es.trabalhoHelpDesk.API.MensagemTask;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import br.senac.es.trabalhoHelpDesk.API.ChamadoTask;
 import br.senac.es.trabalhoHelpDesk.API.OnEventListener;
-import br.senac.es.trabalhoHelpDesk.model.MensagemWrapper;
+import br.senac.es.trabalhoHelpDesk.model.Chamados;
+import br.senac.es.trabalhoHelpDesk.model.Status;
 
 
 public class Tab1Fragment extends Fragment {
-    ListView listViewMensagensEnviadas;
+    ListView listChamadosAbertos;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 final View view = inflater.inflate(R.layout.fragment_one, container, false);
 
-        MensagemTask mensagemTask = new MensagemTask(view.getContext(), new OnEventListener<String>() {
+        final List<Chamados> listaDeChamadosAbertos = new ArrayList<Chamados>();
+
+        ChamadoTask chamadoTask = new ChamadoTask(view.getContext(), new OnEventListener<String>() {
             @Override
             public void onSuccess(String result) {
-                Toast.makeText(view.getContext(), "SUCCESS: "+result, Toast.LENGTH_LONG).show();
+                Toast.makeText(view.getContext(), "ABERTOS: ", Toast.LENGTH_LONG).show();
 //                Log.e("JSON",result);
                 Gson gson = new Gson();
-                MensagemWrapper[] mensagens = gson.fromJson(result, MensagemWrapper[].class);
-                ArrayAdapter<MensagemWrapper> adapter = new ArrayAdapter<MensagemWrapper>(getActivity(),android.R.layout.simple_list_item_1, mensagens);
 
-                listViewMensagensEnviadas = (ListView) view.findViewById(R.id.lista);
-                listViewMensagensEnviadas.setAdapter(adapter);
+                Chamados[] chamados = gson.fromJson(result, Chamados[].class);
+
+            for (Chamados chamado: chamados){
+                if(chamado.getStatus().toLowerCase().equals("aberto")){
+
+                listaDeChamadosAbertos.add(chamado);
+
+
+
+                }
+                ArrayAdapter<Chamados> adapter = new ArrayAdapter<Chamados>(getActivity(),android.R.layout.simple_list_item_1, listaDeChamadosAbertos);
+
+
+
+                listChamadosAbertos = (ListView) view.findViewById(R.id.lista);
+                listChamadosAbertos.setAdapter(adapter);
+            }
+
+
             }
 
             @Override
@@ -46,7 +67,7 @@ final View view = inflater.inflate(R.layout.fragment_one, container, false);
 
             }
         });
-        mensagemTask.execute();
+        chamadoTask.execute();
         return view;
     }
 }

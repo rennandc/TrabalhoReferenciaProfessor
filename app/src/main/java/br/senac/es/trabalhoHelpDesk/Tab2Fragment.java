@@ -6,60 +6,66 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
+
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import br.senac.es.trabalhoHelpDesk.API.ChamadoTask;
+import br.senac.es.trabalhoHelpDesk.API.OnEventListener;
+import br.senac.es.trabalhoHelpDesk.model.Chamados;
 import br.senac.es.trabalhoHelpDesk.model.Mensagem;
 import br.senac.es.trabalhoHelpDesk.model.Status;
 
 public class Tab2Fragment extends Fragment {
+    ListView listChamadosAbertos;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view =
-                inflater.inflate(R.layout.fragment_two, container,false);
+        final View view = inflater.inflate(R.layout.fragment_one, container, false);
 
-        ListView listaDeChamadosTela2 = (ListView) view.findViewById(R.id.lista2);
-        List<Mensagem> listaMensagem = new ArrayList<Mensagem>();
-        List<Mensagem> listaDeMensagensNaoEnviadas = new ArrayList<Mensagem>();
+        final List<Chamados> listaDeChamadosFechados = new ArrayList<Chamados>();
 
+        ChamadoTask chamadoTask = new ChamadoTask(view.getContext(), new OnEventListener<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Toast.makeText(view.getContext(), "FECHADOS: ", Toast.LENGTH_LONG).show();
+//                Log.e("JSON",result);
+                Gson gson = new Gson();
 
-        Mensagem novaMensagem1 = new Mensagem(1L, "rennan", Status.ENVIADA);
-        Mensagem novaMensagem2 = new Mensagem(2L, "Coquinha", Status.NAOENVIADA);
-        Mensagem novaMensagem3 = new Mensagem(3L, "Luiz", Status.ENVIADA);
-        Mensagem novaMensagem4 = new Mensagem(4L, "Zemerson", Status.ENVIADA);
-        Mensagem novaMensagem5 = new Mensagem(5L, "Professor", Status.NAOENVIADA);
-        Mensagem novaMensagem6 = new Mensagem(6L, "Thiaguinho", Status.NAOENVIADA);
+                Chamados[] chamados = gson.fromJson(result, Chamados[].class);
 
+                for (Chamados chamado: chamados){
+                    if(chamado.getStatus().toLowerCase().equals("fechado")){
 
-        listaMensagem.add(novaMensagem1);
-        listaMensagem.add(novaMensagem2);
-        listaMensagem.add(novaMensagem3);
-        listaMensagem.add(novaMensagem4);
-        listaMensagem.add(novaMensagem5);
-        listaMensagem.add(novaMensagem6);
+                        listaDeChamadosFechados.add(chamado);
 
 
-        for (int i = 0; i < listaMensagem.size(); i++) {
 
-            if (listaMensagem.get(i).getStatus().equals(Status.NAOENVIADA)) {
-                listaDeMensagensNaoEnviadas.add(listaMensagem.get(i));
+                    }
+                    ArrayAdapter<Chamados> adapter = new ArrayAdapter<Chamados>(getActivity(),android.R.layout.simple_list_item_1, listaDeChamadosFechados);
 
-            } else {
+
+
+                    listChamadosAbertos = (ListView) view.findViewById(R.id.lista);
+                    listChamadosAbertos.setAdapter(adapter);
+                }
+
 
             }
-            ArrayAdapter<Mensagem> adapter = new ArrayAdapter<Mensagem>(getActivity(), android.R.layout.simple_list_item_1, listaDeMensagensNaoEnviadas);
 
-            listaDeChamadosTela2.setAdapter(adapter);
+            @Override
+            public void onFailure(Exception e) {
+                Toast.makeText(view.getContext(),"ERROR: " + e.getMessage(), Toast.LENGTH_LONG).show();
 
-        }
-
-
+            }
+        });
+        chamadoTask.execute();
         return view;
     }
-
 }
